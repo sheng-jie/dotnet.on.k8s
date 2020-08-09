@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
 
 namespace K8S.NET.Apollo.Controllers
 {
@@ -10,24 +10,43 @@ namespace K8S.NET.Apollo.Controllers
     [Route("[controller]/[action]")]
     public class ApolloController : Controller
     {
+        private readonly IConfiguration _configuration;
+        public ApolloController(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
         public IActionResult Index()
         {
             return View();
         }
 
+        [HttpGet]
         public IActionResult GetString(string key)
         {
-            throw new NotImplementedException();
+            var val = _configuration.GetValue<string>(key);
+            return Ok($"{key}:{val}");
         }
 
-        public IActionResult GetSection(string sectionKey)
+        [HttpGet]
+        public IActionResult GetSection(string key)
         {
-            throw new NotImplementedException();
+            var loggingObj = new LoggingOptions();
+
+            _configuration.GetSection(key).Bind(loggingObj);
+
+            return Ok(loggingObj);
         }
 
-        public IActionResult GetJson(string jsonKey)
+        [HttpGet]
+        public IActionResult GetConnectionStrings(string key)
         {
-            throw new NotImplementedException();
+
+            var val = _configuration.GetConnectionString(key);
+            return Ok($"{key}:{val}");
         }
     }
+
+
+
+
 }
