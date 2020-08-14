@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -15,35 +17,40 @@ namespace K8S.NET.Apollo.Controllers
         {
             _configuration = configuration;
         }
+
+        [HttpGet]
         public IActionResult Index()
         {
             return View();
         }
 
-        [HttpGet]
+        [HttpGet("key")]
+        public IActionResult GetLogLevelSection()
+        {
+            var val = _configuration.GetSection(key).Get<LoggingOptions>();
+            return Ok($"{key}:{JsonSerializer.Serialize(val)}");
+        }
+
+        [HttpGet("key")]
         public IActionResult GetString(string key)
         {
             var val = _configuration.GetValue<string>(key);
             return Ok($"{key}:{val}");
         }
 
-        [HttpGet]
-        public IActionResult GetSection(string key)
-        {
-            var loggingObj = new LoggingOptions();
 
-            _configuration.GetSection(key).Bind(loggingObj);
-
-            return Ok(loggingObj);
-        }
-
-        [HttpGet]
+        [HttpGet("key")]
         public IActionResult GetConnectionStrings(string key)
         {
 
             var val = _configuration.GetConnectionString(key);
             return Ok($"{key}:{val}");
         }
+    }
+
+    public class LoggingOptions : Dictionary<string, string>
+    {
+
     }
 
 

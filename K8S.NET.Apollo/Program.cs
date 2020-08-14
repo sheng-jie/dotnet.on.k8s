@@ -24,8 +24,8 @@ namespace K8S.NET.Apollo
             {
                 configBuilder.AddApollo(configBuilder.Build().GetSection("apollo"))
                     .AddDefault()
-                    .AddNamespace("logging.json")
-                    .AddNamespace("connectionStrings.json")
+                    .AddNamespace("TEST1.connectionstrings", "ConnectionStrings")
+                    .AddNamespace("logging", ConfigFileFormat.Json)
                     ;
             })
                 .ConfigureWebHostDefaults(webBuilder =>
