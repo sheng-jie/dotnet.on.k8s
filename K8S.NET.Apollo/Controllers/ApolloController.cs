@@ -27,6 +27,7 @@ namespace K8S.NET.Apollo.Controllers
         [HttpGet("key")]
         public IActionResult GetLogLevelSection()
         {
+            var key = "Logging:LogLevel";
             var val = _configuration.GetSection(key).Get<LoggingOptions>();
             return Ok($"{key}:{JsonSerializer.Serialize(val)}");
         }
