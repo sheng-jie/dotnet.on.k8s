@@ -19,12 +19,6 @@ namespace K8S.NET.Apollo.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index()
-        {
-            return View();
-        }
-
-        [HttpGet("key")]
         public IActionResult GetLogLevelSection()
         {
             var key = "Logging:LogLevel";
