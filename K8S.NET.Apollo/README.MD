@@ -12,7 +12,7 @@ Apollo作为微服务体系中必不可少的基础服务，其架构设计和�
 因此本文接下来将主要来介绍如何基于Helm快速部署Apollo集群至K8S，并与.NET Core应用进行集成，同时介绍下如何平滑迁移配置到Apollo。
 
 **本文具有详细的部署步骤，建议动手实操。
-部署Chart包和Demo已上传至GitHub，可收藏备用。**
+部署Chart包和Demo已上传至GitHub：[K8S.NET.Apollo](https://github.com/sheng-jie/dotnet.on.k8s/tree/master/K8S.NET.Apollo)，可收藏备用。**
 
 # 2. Apollo 架构一览
 在部署之前，需要了解Apollo的基础架构，以便在后续部署工作的展开。
@@ -697,4 +697,4 @@ public static IHostBuilder CreateHostBuilder(string[] args) =>
 # 6. 最后
 以上，相信若能够动手实操，你将收获匪浅。
 
-本文Demo和Chart包的完整配置已上传至Github，请按需取用。
+本文Demo和Chart包的完整配置已上传至Github：[K8S.NET.Apollo](https://github.com/sheng-jie/dotnet.on.k8s/tree/master/K8S.NET.Apollo)，请按需取用。
