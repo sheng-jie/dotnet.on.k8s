@@ -1,0 +1,105 @@
+# Helm install --dry-run --debug apollo-svc-dev . -f dev-apollo-svc-values.yaml -n apollo
+# Helm install apollo-svc-dev . -f dev-apollo-svc-values.yaml -n apollo
+# Helm upgrade apollo-svc-dev . -f dev-apollo-svc-values.yaml -n apollo
+
+configdb:
+  name: apollo-configdb
+  # apolloconfigdb host
+  host: "mysql-apollo.db"
+  port: 3306
+  dbName: ApolloConfigDB
+  # apolloconfigdb user name
+  userName: "root"
+  # apolloconfigdb password
+  password: "root"
+  connectionStringProperties: characterEncoding=utf8
+  service:
+    # whether to create a Service for this host or not
+    enabled: false
+    fullNameOverride: ""
+    port: 3306
+    type: ClusterIP
+
+configService:
+  name: apollo-configservice
+  fullNameOverride: ""
+  replicaCount: 1
+  containerPort: 8080
+  image:
+    repository: apolloconfig/apollo-configservice
+    pullPolicy: IfNotPresent
+  imagePullSecrets: []
+  service:
+    fullNameOverride: ""
+    port: 8080
+    targetPort: 8080
+    type: ClusterIP
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      nginx.ingress.kubernetes.io/rewrite-target: /$2
+    hosts:
+      - host: "apollo.demo.com"
+        paths: ["/config-svc(/|$)(.*)"]
+    tls: []
+  liveness:
+    initialDelaySeconds: 100
+    periodSeconds: 10
+  readiness:
+    initialDelaySeconds: 30
+    periodSeconds: 5
+  config:
+    # spring profiles to activate
+    profiles: "github,kubernetes"
+    # override apollo.config-service.url: config service url to be accessed by apollo-client
+    configServiceUrlOverride: "http://apollo.demo.com/config-svc"
+    # override apollo.admin-service.url: admin service url to be accessed by apollo-portal
+    adminServiceUrlOverride: "http://apollo.demo.com/admin-svc"
+  # environment variables passed to the container, e.g. JAVA_OPTS
+  env: {}
+  strategy: {}
+  resources: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+adminService:
+  name: apollo-adminservice
+  fullNameOverride: ""
+  replicaCount: 1
+  containerPort: 8090
+  image:
+    repository: apolloconfig/apollo-adminservice
+    pullPolicy: IfNotPresent
+  imagePullSecrets: []
+  service:
+    fullNameOverride: ""
+    port: 8090
+    targetPort: 8090
+    type: ClusterIP
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      nginx.ingress.kubernetes.io/rewrite-target: /$2
+    hosts:
+      - host: "apollo.demo.com"
+        paths: ["/admin-svc(/|$)(.*)"]
+    tls: []
+  liveness:
+    initialDelaySeconds: 100
+    periodSeconds: 10
+  readiness:
+    initialDelaySeconds: 30
+    periodSeconds: 5
+  config:
+    # spring profiles to activate
+    profiles: "github,kubernetes"
+  # environment variables passed to the container, e.g. JAVA_OPTS
+  env: {}
+  strategy: {}
+  resources: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}

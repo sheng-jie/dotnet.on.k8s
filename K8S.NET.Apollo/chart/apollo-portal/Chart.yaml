@@ -1,0 +1,12 @@
+apiVersion: v2
+appVersion: 1.7.0
+description: A Helm chart for Apollo Portal
+home: https://github.com/ctripcorp/apollo
+icon: https://raw.githubusercontent.com/ctripcorp/apollo/master/apollo-portal/src/main/resources/static/img/logo-simple.png
+maintainers:
+- email: nobodyiam@gmail.com
+  name: nobodyiam
+  url: https://github.com/nobodyiam
+name: apollo-portal
+type: application
+version: 0.1.0

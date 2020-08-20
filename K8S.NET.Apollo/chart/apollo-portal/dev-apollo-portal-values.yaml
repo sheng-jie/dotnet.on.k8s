@@ -1,0 +1,76 @@
+# Helm install --dry-run --debug apollo-portal-dev . -f dev-apollo-portal-values.yaml -n apollo
+# Helm install apollo-portal-dev . -f dev-apollo-portal-values.yaml -n apollo
+# Helm upgrade apollo-portal-dev . -f dev-apollo-portal-values.yaml -n apollo
+
+name: apollo-portal
+fullNameOverride: ""
+replicaCount: 1
+containerPort: 8070
+image:
+  repository: apolloconfig/apollo-portal
+  pullPolicy: IfNotPresent
+imagePullSecrets: []
+service:
+  fullNameOverride: ""
+  port: 8070
+  targetPort: 8070
+  type: ClusterIP
+  sessionAffinity: ClientIP
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/affinity: "cookie"
+    nginx.ingress.kubernetes.io/session-cookie-name: "route"
+  hosts:
+    - host: "apollo.demo.com"
+      paths: ["/"]
+  tls: []
+liveness:
+  initialDelaySeconds: 100
+  periodSeconds: 10
+readiness:
+  initialDelaySeconds: 30
+  periodSeconds: 5
+# environment variables passed to the container, e.g. JAVA_OPTS
+env: {}
+strategy: {}
+resources: {}
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+config:
+  # spring profiles to activate
+  profiles: "github,auth"
+  # specify the env names, e.g. dev,pro
+  envs: "dev"
+  # specify the meta servers, e.g.
+  # dev: http://apollo-configservice-dev:8080
+  # pro: http://apollo-configservice-pro:8080
+  metaServers: 
+    dev: http://apollo-svc-dev-apollo-configservice.apollo:8080
+    # dev: http://apollo.demo.com
+  # specify the context path, e.g. /apollo
+  contextPath: ""
+  # extra config files for apollo-portal, e.g. application-ldap.yml
+  files: {}
+
+portaldb:
+  name: apollo-portaldb
+  # apolloportaldb host
+  host: mysql-apollo.db
+  port: 3306
+  dbName: ApolloPortalDB
+  # apolloportaldb user name
+  userName: root
+  # apolloportaldb password
+  password: root
+  connectionStringProperties: characterEncoding=utf8
+  service:
+    # whether to create a Service for this host or not
+    enabled: false
+    fullNameOverride: ""
+    port: 3306
+    type: ClusterIP
