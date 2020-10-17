@@ -29,23 +29,23 @@ static_resources:
                             prefix: "/c"
                           route:
                             prefix_rewrite: "/city"
-                            cluster: coffee_service
+                            cluster: city_service
                         - match:
                             prefix: "/w"
                           route:
                             prefix_rewrite: "/weather"
-                            cluster: tea_service
+                            cluster: weather_service
                 http_filters:
                   - name: envoy.filters.http.router
   clusters:
-    - name: coffee_service
+    - name: city_service
       connect_timeout: 0.25s
       type: LOGICAL_DNS
       # Comment out the following line to test on v6 networks
       dns_lookup_family: V4_ONLY
       lb_policy: ROUND_ROBIN
       load_assignment:
-        cluster_name: coffee_service
+        cluster_name: city_service
         endpoints:
           - lb_endpoints:
               - endpoint:
@@ -53,14 +53,14 @@ static_resources:
                     socket_address:
                       address: cityapi
                       port_value: 80
-    - name: tea_service
+    - name: weather_service
       connect_timeout: 0.25s
       type: LOGICAL_DNS
       # Comment out the following line to test on v6 networks
       dns_lookup_family: V4_ONLY
       lb_policy: ROUND_ROBIN
       load_assignment:
-        cluster_name: tea_service
+        cluster_name: weather_service
         endpoints:
           - lb_endpoints:
               - endpoint:
