@@ -20,7 +20,6 @@ namespace K8S.NET.CityApi.Controllers
         public ActionResult Get()
         {
             var rng = new Random();
-            
             return Ok(Cities[rng.Next(Cities.Length)]);
         }
     }

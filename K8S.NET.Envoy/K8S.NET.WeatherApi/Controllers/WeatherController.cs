@@ -20,7 +20,6 @@ namespace K8S.NET.WeatherApi.Controllers
         public ActionResult Get()
         {
             var rng = new Random();
-            
             return Ok(Summaries[rng.Next(Summaries.Length)]);
         }
     }
